@@ -158,9 +158,45 @@ function PID_S2 (S1_Black: number, S1_White: number, S2_Black: number, S2_White:
     wuKong.setAllMotor(M1_Power, M2_Power)
 }
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), P1_Black, P1_White, 12, 90)
-    basic.showNumber(P1_Sensor)
+    let MissionArea_lst: string[] = []
+    let MissionID_lst: string[] = []
+    let MissionType_lst: string[] = []
+    basic.showIcon(IconNames.Chessboard)
+    Response = "ERROR"
+    while (Response == "ERROR") {
+        ServerMsg = WROHellasCloud.startMission("tmp")
+        Response_lst = ServerMsg.split(";")
+        Response = Response_lst[0]
+        MissionType_lst[0] = "tmp"
+        MissionID_lst[0] = Response_lst[0]
+        MissionArea_lst[0] = Response_lst[1]
+    }
+    basic.showString("" + (MissionType_lst[0]))
+    basic.pause(500)
+    basic.showString("" + (MissionID_lst[0]))
+    basic.pause(500)
+    basic.showString("" + (MissionArea_lst[0]))
+    basic.pause(500)
+    basic.showIcon(IconNames.Chessboard)
+    Response = "ERROR"
+    Response_lst = []
+    while (Response == "ERROR") {
+        ServerMsg = WROHellasCloud.startMission("hum")
+        Response_lst = ServerMsg.split(";")
+        Response = Response_lst[0]
+        MissionType_lst[1] = "hum"
+        MissionID_lst[1] = Response_lst[0]
+        MissionArea_lst[1] = Response_lst[1]
+    }
+    basic.showString("" + (MissionType_lst[1]))
+    basic.pause(500)
+    basic.showString("" + (MissionID_lst[1]))
+    basic.pause(500)
+    basic.showString("" + (MissionArea_lst[1]))
 })
+let Response_lst: string[] = []
+let ServerMsg = ""
+let Response = ""
 let S_Distance = 0
 let Pos_To = ""
 let Positions: string[] = []
@@ -176,7 +212,7 @@ let P2_White = 0
 let P2_Black = 0
 let P1_White = 0
 let P1_Black = 0
-basic.showIcon(IconNames.Yes)
+basic.showIcon(IconNames.No)
 radio.setGroup(1)
 P1_Black = 855
 P1_White = 1023
@@ -184,3 +220,16 @@ let P1_Offset = 51
 P2_Black = 846
 P2_White = 996
 let power = 20
+WROHellasCloud.wifiSettings(
+SerialPin.P14,
+SerialPin.P15,
+BaudRate.BaudRate115200,
+"smartbirds",
+"strawberry"
+)
+WROHellasCloud.cloudSettings("164.90.177.227", "3040", "XEAUD")
+WROHellasCloud.wifiConnect()
+while (!(WROHellasCloud.wifiStatus())) {
+    WROHellasCloud.wifiConnect()
+}
+basic.showIcon(IconNames.Yes)
