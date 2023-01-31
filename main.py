@@ -126,8 +126,6 @@ function Front_Ultrasonic_Measure () {
     }
 }
 input.onButtonPressed(Button.B, function () {
-    let MissionID_lst: string[] = []
-    let MissionType_lst: string[] = []
     basic.showIcon(IconNames.Chessboard)
     Response = "ERROR"
     while (Response == "ERROR") {
@@ -138,17 +136,11 @@ input.onButtonPressed(Button.B, function () {
         MissionID_lst[0] = Response_lst[0]
         MissionArea_lst[0] = Response_lst[1]
     }
-    basic.showIcon(IconNames.Chessboard)
-    Response = "ERROR"
-    Response_lst = []
-    while (Response == "ERROR") {
-        ServerMsg = WROHellasCloud.startMission("hum")
-        Response_lst = ServerMsg.split(";")
-        Response = Response_lst[0]
-        MissionType_lst[1] = "hum"
-        MissionID_lst[1] = Response_lst[0]
-        MissionArea_lst[1] = Response_lst[1]
-    }
+    basic.showString("" + (ServerMsg))
+    basic.pause(500)
+    basic.showString("" + (Response_lst[0]))
+    basic.pause(500)
+    basic.showString("" + (Response_lst[1]))
 })
 function Position_B01 () {
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -183,16 +175,27 @@ function Shorting () {
     while (i <= MissionArea_lst.length) {
         index = MissionArea_lst.length
         while (index >= i) {
-            if (MissionArea_lst[index] == MissionArea_lst[index - 1]) {
-            	
+            if (MissionArea_lst[index] < MissionArea_lst[index - 1]) {
+                temp = MissionArea_lst[index]
+                MissionArea_lst[index] = MissionArea_lst[index - 1]
+                MissionArea_lst[index - 1] = temp
+                temp = MissionArea_lst[index]
+                MissionType_lst[index] = MissionType_lst[index - 1]
+                MissionType_lst[index - 1] = temp
+                temp = MissionID_lst[index]
+                MissionID_lst[index] = MissionID_lst[index - 1]
+                MissionID_lst[index - 1] = temp
             }
             index += -1
         }
         i += -1
     }
 }
+let temp = 0
 let i = 0
-let MissionArea_lst: string[] = []
+let MissionArea_lst: number[] = []
+let MissionID_lst: string[] = []
+let MissionType_lst: string[] = []
 let Response_lst: string[] = []
 let ServerMsg = ""
 let Response = ""
