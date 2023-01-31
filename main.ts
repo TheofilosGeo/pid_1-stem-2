@@ -158,9 +158,6 @@ function PID_S2 (S1_Black: number, S1_White: number, S2_Black: number, S2_White:
     wuKong.setAllMotor(M1_Power, M2_Power)
 }
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    let MissionArea_lst: string[] = []
-    let MissionID_lst: string[] = []
-    let MissionType_lst: string[] = []
     basic.showIcon(IconNames.Chessboard)
     Response = "ERROR"
     while (Response == "ERROR") {
@@ -194,6 +191,32 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     basic.pause(500)
     basic.showString("" + (MissionArea_lst[1]))
 })
+function Shorting () {
+    i = 0
+    while (i <= MissionArea_lst.length) {
+        Index = MissionArea_lst.length
+        while (Index >= i) {
+            if (MissionArea_lst[Index] < MissionArea_lst[Index - 1]) {
+                temp = MissionArea_lst[Index]
+                MissionArea_lst[Index] = MissionArea_lst[Index - 1]
+                MissionArea_lst[Index - 1] = temp
+                temp = MissionID_lst[Index]
+                MissionID_lst[Index] = MissionID_lst[Index - 1]
+                MissionID_lst[Index - 1] = temp
+                temp = MissionType_lst[Index]
+                MissionType_lst[Index] = MissionType_lst[Index - 1]
+                MissionType_lst[Index - 1] = temp
+            }
+            Index += -1
+        }
+        i += -1
+    }
+}
+let temp = 0
+let i = 0
+let MissionArea_lst: number[] = []
+let MissionID_lst: string[] = []
+let MissionType_lst: string[] = []
 let Response_lst: string[] = []
 let ServerMsg = ""
 let Response = ""
