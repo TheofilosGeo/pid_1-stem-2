@@ -12,6 +12,18 @@ function PID_S2_UntilCross (S1_Black: number, S1_White: number, S2_Black: number
         wuKong.setAllMotor(M1_Power, M2_Power)
     }
 }
+function CreateMission (MissionType: string, Index_lst: number) {
+    Response = "ERROR"
+    Response_lst = []
+    while (Response == "ERROR") {
+        ServerMsg = WROHellasCloud.startMission(MissionType)
+        Response_lst = ServerMsg.split(";")
+        Response = Response_lst[0]
+        MissionType_lst[Index_lst] = MissionType
+        MissionID_lst[Index_lst] = Response_lst[0]
+        MissionArea_lst[Index_lst] = Response_lst[1]
+    }
+}
 function TurnRight_90 () {
     while (pins.digitalReadPin(DigitalPin.P8) == 1) {
         wuKong.setMotorSpeed(wuKong.MotorList.M1, 20)
@@ -111,6 +123,15 @@ function PID_S2_UntilDistance (S1_Black: number, S1_White: number, S2_Black: num
         Front_Ultrasonic_Measure()
     }
 }
+function CompleteMission (MissionId: string, Data: string) {
+    Response = "ERROR"
+    Response_lst = []
+    while (Response == "ERROR") {
+        ServerMsg = WROHellasCloud.completeMission(MissionId, Data)
+        Response_lst = ServerMsg.split(";")
+        Response = Response_lst[0]
+    }
+}
 function Front_Ultrasonic_Measure () {
     S_Distance = sonar.ping(
     DigitalPin.P12,
@@ -126,29 +147,24 @@ function Front_Ultrasonic_Measure () {
     }
 }
 input.onButtonPressed(Button.B, function () {
-    let MissionID_lst: string[] = []
-    let MissionType_lst: string[] = []
     basic.showIcon(IconNames.Chessboard)
-    Response = "ERROR"
-    while (Response == "ERROR") {
-        ServerMsg = WROHellasCloud.startMission("tmp")
-        Response_lst = ServerMsg.split(";")
-        Response = Response_lst[0]
-        MissionType_lst[0] = "tmp"
-        MissionID_lst[0] = Response_lst[0]
-        MissionArea_lst[0] = Response_lst[1]
-    }
+    CreateMission("tmp", 0)
     basic.showIcon(IconNames.Chessboard)
-    Response = "ERROR"
-    Response_lst = []
-    while (Response == "ERROR") {
-        ServerMsg = WROHellasCloud.startMission("hum")
-        Response_lst = ServerMsg.split(";")
-        Response = Response_lst[0]
-        MissionType_lst[1] = "hum"
-        MissionID_lst[1] = Response_lst[0]
-        MissionArea_lst[1] = Response_lst[1]
+    CreateMission("hum", 1)
+    basic.showIcon(IconNames.Chessboard)
+    CreateMission("hpa", 2)
+    basic.showIcon(IconNames.Chessboard)
+    CreateMission("lgt", 3)
+    basic.showIcon(IconNames.Chessboard)
+    CreateMission("umv", 4)
+    basic.showIcon(IconNames.Chessboard)
+    CreateMission("dbm", 5)
+    Shorting()
+    Value = 20
+    for (let index2 = 0; index2 < 5; index2++) {
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
     }
+    basic.showIcon(IconNames.Diamond)
 })
 function Position_B01 () {
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -184,22 +200,33 @@ function Shorting () {
         index = MissionArea_lst.length
         while (index >= i) {
             if (MissionArea_lst[index] == MissionArea_lst[index - 1]) {
-            	
+                temp = MissionArea_lst[index]
+                MissionArea_lst[index] = MissionArea_lst[index - 1]
+                MissionArea_lst[index - 1] = temp
+                temp = MissionArea_lst[index]
+                MissionType_lst[index] = MissionType_lst[index - 1]
+                MissionType_lst[index - 1] = temp
+                temp = MissionID_lst[index]
+                MissionID_lst[index] = MissionID_lst[index - 1]
+                MissionID_lst[index - 1] = temp
             }
             index += -1
         }
         i += -1
     }
 }
+let temp = ""
 let i = 0
-let MissionArea_lst: string[] = []
-let Response_lst: string[] = []
-let ServerMsg = ""
-let Response = ""
 let S_Distance = 0
 let Pos_To = ""
 let Positions: string[] = []
 let index = 0
+let MissionArea_lst: string[] = []
+let MissionID_lst: string[] = []
+let MissionType_lst: string[] = []
+let ServerMsg = ""
+let Response_lst: string[] = []
+let Response = ""
 let M2_Power = 0
 let M1_Power = 0
 let P = 0
