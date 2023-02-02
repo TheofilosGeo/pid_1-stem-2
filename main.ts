@@ -149,22 +149,19 @@ function Front_Ultrasonic_Measure () {
 input.onButtonPressed(Button.B, function () {
     basic.showIcon(IconNames.Chessboard)
     CreateMission("tmp", 0)
-    basic.showIcon(IconNames.Chessboard)
+    basic.showString("tmp")
     CreateMission("hum", 1)
-    basic.showIcon(IconNames.Chessboard)
+    basic.showString("hum")
     CreateMission("hpa", 2)
-    basic.showIcon(IconNames.Chessboard)
+    basic.showString("hpa")
     CreateMission("lgt", 3)
-    basic.showIcon(IconNames.Chessboard)
+    basic.showString("lgt")
     CreateMission("umv", 4)
-    basic.showIcon(IconNames.Chessboard)
+    basic.showString("umv")
     CreateMission("dbm", 5)
+    basic.showString("dbm")
     Shorting()
-    Value = 20
-    for (let index2 = 0; index2 < 5; index2++) {
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-    }
-    basic.showIcon(IconNames.Diamond)
+    basic.showIcon(IconNames.Yes)
 })
 function Position_B01 () {
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -212,7 +209,7 @@ function Shorting () {
             }
             index += -1
         }
-        i += -1
+        i += 1
     }
 }
 let temp = ""
@@ -250,8 +247,8 @@ WROHellasCloud.wifiSettings(
 SerialPin.P14,
 SerialPin.P15,
 BaudRate.BaudRate115200,
-"TheoGeorgAp",
-"Theofilos0@pass"
+"smartbirds",
+"strawberry"
 )
 WROHellasCloud.cloudSettings("164.90.177.227", "3040", "XEAUD")
 WROHellasCloud.wifiConnect()
