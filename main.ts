@@ -1,5 +1,6 @@
 radio.onReceivedNumber(function (receivedNumber) {
     Flag = "True"
+    basic.showNumber(receivedNumber)
     Value = receivedNumber
 })
 function PID_S2_UntilCross (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
@@ -150,26 +151,22 @@ function Front_Ultrasonic_Measure () {
 input.onButtonPressed(Button.B, function () {
     basic.showIcon(IconNames.Chessboard)
     CreateMission("tmp", 0)
-    basic.showString("tmp")
     CreateMission("hum", 1)
-    basic.showString("hum")
     CreateMission("hpa", 2)
-    basic.showString("hpa")
     CreateMission("lgt", 3)
-    basic.showString("lgt")
     CreateMission("umv", 4)
-    basic.showString("umv")
     CreateMission("dbm", 5)
-    basic.showString("dbm")
     Shorting()
     basic.showIcon(IconNames.Yes)
     Flag = "False"
     radio.sendString("" + (MissionType_lst.shift()))
     MissionArea_lst.removeAt(0)
     while (Flag == "False") {
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        basic.pause(100)
     }
-    basic.showIcon(IconNames.Yes)
+    CompleteMission(MissionID_lst.shift(), convertToText(Value))
+    basic.showString(convertToText(Value))
+    basic.showIcon(IconNames.SmallHeart)
 })
 function Position_B01 () {
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -256,8 +253,8 @@ WROHellasCloud.wifiSettings(
 SerialPin.P14,
 SerialPin.P15,
 BaudRate.BaudRate115200,
-"smartbirds",
-"strawberry"
+"TheoGeorgAp",
+"Theofilos0@pass"
 )
 WROHellasCloud.cloudSettings("164.90.177.227", "3040", "XEAUD")
 WROHellasCloud.wifiConnect()
