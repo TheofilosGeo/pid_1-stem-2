@@ -1,4 +1,5 @@
 radio.onReceivedNumber(function (receivedNumber) {
+    Flag = "True"
     Value = receivedNumber
 })
 function PID_S2_UntilCross (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
@@ -162,6 +163,13 @@ input.onButtonPressed(Button.B, function () {
     basic.showString("dbm")
     Shorting()
     basic.showIcon(IconNames.Yes)
+    Flag = "False"
+    radio.sendString("" + (MissionType_lst.shift()))
+    MissionArea_lst.removeAt(0)
+    while (Flag == "False") {
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+    }
+    basic.showIcon(IconNames.Yes)
 })
 function Position_B01 () {
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -231,6 +239,7 @@ let error = 0
 let P2_Sensor = 0
 let P1_Sensor = 0
 let Value = 0
+let Flag = ""
 let P2_White = 0
 let P2_Black = 0
 let P1_White = 0
