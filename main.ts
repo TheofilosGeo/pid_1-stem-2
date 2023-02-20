@@ -61,6 +61,29 @@ function Position_B02 () {
         Pos_To = MissionArea_lst.shift()
     }
 }
+function Position_B13 () {
+    for (let index2 = 0; index2 < 2; index2++) {
+        PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+        PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    }
+    wuKong.stopAllMotor()
+    TurnRight_90()
+    wuKong.stopAllMotor()
+    for (let index2 = 0; index2 < 2; index2++) {
+        PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+        PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    }
+    wuKong.stopAllMotor()
+    while (Pos_To == "B13") {
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+            CompleteMission(MissionID_lst.shift(), convertToText(Value))
+            Flag = "False"
+            Pos_To = MissionArea_lst.shift()
+        }
+    }
+}
 input.onButtonPressed(Button.A, function () {
     Flag = "False"
     CreateMission("tmp", 0)
@@ -68,18 +91,41 @@ input.onButtonPressed(Button.A, function () {
     CreateMission("hpa", 2)
     CreateMission("umv", 3)
     CreateMission("dbm", 4)
+    CreateMission("prk", 5)
+    CreateMission("rnp", 6)
     Shorting()
     Position_B01()
     Position_B02()
     Position_B05()
     Position_B06()
     Position_B07()
+    Position_B08()
+    Position_B09()
+    Position_10()
+    Position_B13()
+    Position_14()
 })
 function Position_B09 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
     PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
     wuKong.stopAllMotor()
     while (Pos_To == "B09") {
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+        }
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Flag = "False"
+        Pos_To = MissionArea_lst.shift()
+    }
+}
+function Position_10 () {
+    for (let index2 = 0; index2 < 2; index2++) {
+        PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+        PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    }
+    wuKong.stopAllMotor()
+    if (Pos_To == "B10") {
         radio.sendString("" + (MissionType_lst.shift()))
         while (Flag == "False") {
             basic.pause(100)
@@ -257,6 +303,20 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), P1_Black, P1_White, 12, 90)
     basic.showNumber(P1_Sensor)
 })
+function Position_14 () {
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    wuKong.stopAllMotor()
+    if (Pos_To == "B06") {
+    	
+    } else {
+        for (let index2 = 0; index2 < 2; index2++) {
+            PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+            PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+        }
+        wuKong.stopAllMotor()
+    }
+}
 function Shorting () {
     i = 0
     while (i <= MissionArea_lst.length) {
