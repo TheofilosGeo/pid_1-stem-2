@@ -234,32 +234,35 @@ function Front_Ultrasonic_Measure () {
     }
 }
 input.onButtonPressed(Button.B, function () {
-    basic.showIcon(IconNames.Chessboard)
-    CreateMission("tmp", 0)
-    CreateMission("hum", 1)
-    CreateMission("hpa", 2)
-    CreateMission("umv", 3)
-    CreateMission("dbm", 4)
-    Shorting()
-    basic.showIcon(IconNames.Yes)
-    Flag = "False"
-    radio.sendString("" + (MissionType_lst.shift()))
-    MissionArea_lst.removeAt(0)
-    while (Flag == "False") {
-        basic.pause(100)
+    PID_S2_UntilCross(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    wuKong.setAllMotor(20, 20)
+    basic.pause(1100)
+    wuKong.stopAllMotor()
+    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
+        wuKong.setAllMotor(70, -70)
     }
-    CompleteMission(MissionID_lst.shift(), convertToText(Value))
-    basic.showString(convertToText(Value))
-    basic.showIcon(IconNames.SmallHeart)
-    Flag = "False"
-    radio.sendString("" + (MissionType_lst.shift()))
-    MissionArea_lst.removeAt(0)
-    while (Flag == "False") {
-        basic.pause(100)
+    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
+        wuKong.setAllMotor(70, -70)
     }
-    CompleteMission(MissionID_lst.shift(), convertToText(Value))
-    basic.showString(convertToText(Value))
-    basic.showIcon(IconNames.Yes)
+    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
+        wuKong.setAllMotor(70, -70)
+    }
+    wuKong.setAllMotor(70, -70)
+    basic.pause(100)
+    wuKong.stopAllMotor()
+    while (pins.digitalReadPin(DigitalPin.P0) == 0) {
+        wuKong.setAllMotor(-70, -70)
+    }
+    while (pins.digitalReadPin(DigitalPin.P0) == 1) {
+        wuKong.setAllMotor(70, 70)
+    }
+    wuKong.stopAllMotor()
+    wuKong.setMotorSpeed(wuKong.MotorList.M2, 30)
+    basic.pause(200)
+    while (pins.digitalReadPin(DigitalPin.P0) == 0) {
+        wuKong.setMotorSpeed(wuKong.MotorList.M2, 30)
+    }
+    wuKong.stopAllMotor()
 })
 function Position_B07 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
@@ -300,8 +303,13 @@ function PID_S2 (S1_Black: number, S1_White: number, S2_Black: number, S2_White:
     wuKong.setAllMotor(M1_Power, M2_Power)
 }
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), P1_Black, P1_White, 12, 90)
-    basic.showNumber(P1_Sensor)
+    while (pins.digitalReadPin(DigitalPin.P0) == 1) {
+        wuKong.setMotorSpeed(wuKong.MotorList.M2, 30)
+    }
+    while (pins.digitalReadPin(DigitalPin.P0) == 0) {
+        wuKong.setMotorSpeed(wuKong.MotorList.M2, 30)
+    }
+    wuKong.stopAllMotor()
 })
 function Position_14 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
