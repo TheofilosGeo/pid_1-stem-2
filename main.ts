@@ -82,6 +82,15 @@ function Position_B13 () {
 }
 input.onButtonPressed(Button.A, function () {
     Flag = "False"
+    CreateMission("tmp", 0)
+    CreateMission("hum", 1)
+    CreateMission("hpa", 2)
+    CreateMission("umv", 3)
+    CreateMission("dbm", 4)
+    CreateMission("prk", 5)
+    CreateMission("rnp", 6)
+    CreateMission("lvl", 7)
+    Shorting()
     Position_B01()
     Position_B02()
     Position_B05()
