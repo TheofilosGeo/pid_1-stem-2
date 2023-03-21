@@ -3,6 +3,37 @@ radio.onReceivedNumber(function (receivedNumber) {
     basic.showNumber(receivedNumber)
     Value = receivedNumber
 })
+function Position_B05_B13 (text: string) {
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
+        wuKong.setAllMotor(20, 20)
+    }
+    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
+        wuKong.setAllMotor(20, 20)
+    }
+    wuKong.stopAllMotor()
+    TurnRight_90()
+    wuKong.stopAllMotor()
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
+        wuKong.setAllMotor(20, 20)
+    }
+    wuKong.stopAllMotor()
+    while (Pos_To == text) {
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+            CompleteMission(MissionID_lst.shift(), convertToText(Value))
+            Flag = "False"
+            Pos_To = MissionArea_lst.shift()
+        }
+    }
+}
 function CreateMission (MissionType: string, Index_lst: number) {
     Response = "ERROR"
     Response_lst = []
@@ -14,6 +45,21 @@ function CreateMission (MissionType: string, Index_lst: number) {
     MissionType_lst[Index_lst] = MissionType
     MissionID_lst[Index_lst] = Response_lst[0]
     MissionArea_lst[Index_lst] = Response_lst[1]
+}
+function Position_B02_B10 (text: string) {
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
+    wuKong.stopAllMotor()
+    if (Pos_To == text) {
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+        }
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Flag = "False"
+        Pos_To = MissionArea_lst.shift()
+    }
 }
 function TurnRight_90 () {
     while (pins.digitalReadPin(DigitalPin.P8) == 1) {
@@ -30,56 +76,6 @@ function TurnRight_90 () {
     }
     wuKong.stopAllMotor()
 }
-function Position_B02 () {
-    TurnRight_90()
-    wuKong.stopAllMotor()
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
-    wuKong.stopAllMotor()
-    if (Pos_To == "B02") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
-function Position_B13 () {
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
-        wuKong.setAllMotor(20, 20)
-    }
-    wuKong.stopAllMotor()
-    TurnRight_90()
-    wuKong.stopAllMotor()
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (Pos_To == "B13") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-            CompleteMission(MissionID_lst.shift(), convertToText(Value))
-            Flag = "False"
-            Pos_To = MissionArea_lst.shift()
-        }
-    }
-}
 input.onButtonPressed(Button.A, function () {
     Flag = "False"
     CreateMission("tmp", 0)
@@ -92,17 +88,17 @@ input.onButtonPressed(Button.A, function () {
     CreateMission("lvl", 7)
     Shorting()
     Position_B01()
-    Position_B02()
-    Position_B05()
-    Position_B06()
-    Position_B07()
-    Position_B08()
+    Position_B02_B10("B02")
+    Position_B05_B13("B05")
+    Position_B06_B14("B06")
+    Position_B07_B15("B07")
+    Position_B08_B16("B08")
     Position_B09()
-    Position_B10()
-    Position_B13()
-    Position_B14()
-    Position_B15()
-    Position_B16()
+    Position_B02_B10("B10")
+    Position_B05_B13("B13")
+    Position_B06_B14("B14")
+    Position_B07_B15("B15")
+    Position_B08_B16("B16")
 })
 function Position_B09 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
@@ -135,93 +131,10 @@ function PID_S2_UntilBlack (S1_Black: number, S1_White: number, S2_Black: number
         wuKong.setAllMotor(M1_Power, M2_Power)
     }
 }
-function Position_B05 () {
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
-        wuKong.setAllMotor(20, 20)
-    }
-    wuKong.stopAllMotor()
-    TurnRight_90()
-    wuKong.stopAllMotor()
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    wuKong.stopAllMotor()
-    while (Pos_To == "B05") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-            CompleteMission(MissionID_lst.shift(), convertToText(Value))
-            Flag = "False"
-            Pos_To = MissionArea_lst.shift()
-        }
-    }
-}
-function Position_B16 () {
-    TurnRight_90()
-    wuKong.stopAllMotor()
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    wuKong.stopAllMotor()
-    while (Pos_To == "B16") {
-        basic.showIcon(IconNames.Happy)
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
-function Position_B08 () {
-    TurnRight_90()
-    wuKong.stopAllMotor()
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    wuKong.stopAllMotor()
-    while (Pos_To == "B08") {
-        basic.showIcon(IconNames.Happy)
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
-function Position_B15 () {
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
-        wuKong.setAllMotor(20, 20)
-    }
-    wuKong.stopAllMotor()
-    if (Pos_To == "B15") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
-function Position_B06 () {
+function Position_B06_B14 (text: string) {
     PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
     wuKong.stopAllMotor()
-    if (Pos_To == "B06") {
+    if (Pos_To == text) {
     	
     } else {
         for (let index2 = 0; index2 < 2; index2++) {
@@ -251,56 +164,6 @@ function PID_S2_UntilCross_P8 (S1_Black: number, S1_White: number, S2_Black: num
         wuKong.setAllMotor(M1_Power, M2_Power)
     }
 }
-function Position_B14 () {
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    wuKong.stopAllMotor()
-    if (Pos_To == "B06") {
-    	
-    } else {
-        for (let index2 = 0; index2 < 2; index2++) {
-            PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-            PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-        }
-        wuKong.stopAllMotor()
-    }
-}
-function Position_B10 () {
-    for (let index2 = 0; index2 < 2; index2++) {
-        PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-        PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
-    }
-    wuKong.stopAllMotor()
-    if (Pos_To == "B10") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
-function Position_B07 () {
-    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
-        wuKong.setAllMotor(20, 20)
-    }
-    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
-        wuKong.setAllMotor(20, 20)
-    }
-    wuKong.stopAllMotor()
-    if (Pos_To == "B07") {
-        radio.sendString("" + (MissionType_lst.shift()))
-        while (Flag == "False") {
-            basic.pause(100)
-        }
-        CompleteMission(MissionID_lst.shift(), convertToText(Value))
-        Flag = "False"
-        Pos_To = MissionArea_lst.shift()
-    }
-}
 function PID_S2_UntilCross_P0 (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
     while (pins.digitalReadPin(DigitalPin.P0) == 0) {
         P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), S1_Black, S1_White, 12, 90)
@@ -312,11 +175,29 @@ function PID_S2_UntilCross_P0 (S1_Black: number, S1_White: number, S2_Black: num
         wuKong.setAllMotor(M1_Power, M2_Power)
     }
 }
+function Position_B08_B16 (text: string) {
+    TurnRight_90()
+    wuKong.stopAllMotor()
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+    wuKong.stopAllMotor()
+    while (Pos_To == text) {
+        basic.showIcon(IconNames.Happy)
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+        }
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Flag = "False"
+        Pos_To = MissionArea_lst.shift()
+    }
+}
 function Position_B01 () {
     PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.2)
     while (pins.digitalReadPin(DigitalPin.P8) == 0) {
         wuKong.setAllMotor(20, 20)
     }
+    wuKong.stopAllMotor()
+    TurnRight_90()
     wuKong.stopAllMotor()
     Pos_To = MissionArea_lst.shift()
     while (Pos_To == "B01") {
@@ -329,15 +210,6 @@ function Position_B01 () {
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
     }
-}
-function PID_S2 (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
-    P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), S1_Black, S1_White, 12, 90)
-    P2_Sensor = Math.map(pins.analogReadPin(AnalogPin.P2), S2_Black, S2_White, 12, 90)
-    error = P1_Sensor - P2_Sensor
-    P = Kp * error
-    M1_Power = Power - P
-    M2_Power = Power + P
-    wuKong.setAllMotor(M1_Power, M2_Power)
 }
 function Shorting () {
     i = 0
@@ -358,6 +230,26 @@ function Shorting () {
             index += -1
         }
         i += 1
+    }
+}
+function Position_B07_B15 (text: string) {
+    PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    while (pins.digitalReadPin(DigitalPin.P8) == 0) {
+        wuKong.setAllMotor(20, 20)
+    }
+    while (pins.digitalReadPin(DigitalPin.P8) == 1) {
+        wuKong.setAllMotor(20, 20)
+    }
+    wuKong.stopAllMotor()
+    if (Pos_To == text) {
+        radio.sendString("" + (MissionType_lst.shift()))
+        while (Flag == "False") {
+            basic.pause(100)
+        }
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Flag = "False"
+        Pos_To = MissionArea_lst.shift()
     }
 }
 function Εnergy_measurement () {
@@ -400,13 +292,13 @@ let P = 0
 let error = 0
 let P2_Sensor = 0
 let P1_Sensor = 0
-let Pos_To = ""
-let MissionArea_lst: string[] = []
-let MissionID_lst: string[] = []
-let MissionType_lst: string[] = []
 let ServerMsg = ""
 let Response_lst: string[] = []
 let Response = ""
+let MissionArea_lst: string[] = []
+let MissionID_lst: string[] = []
+let MissionType_lst: string[] = []
+let Pos_To = ""
 let Value = 0
 let Flag = ""
 let P2_White = 0
