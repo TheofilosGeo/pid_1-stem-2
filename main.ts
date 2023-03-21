@@ -198,19 +198,6 @@ function Position_B08 () {
         Pos_To = MissionArea_lst.shift()
     }
 }
-function PID_S2_UntilDistance (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number, Distance: number) {
-    Front_Ultrasonic_Measure()
-    while (S_Distance > Distance) {
-        P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), S1_Black, S1_White, 12, 90)
-        P2_Sensor = Math.map(pins.analogReadPin(AnalogPin.P2), S2_Black, S2_White, 12, 90)
-        error = P1_Sensor - P2_Sensor
-        P = Kp * error
-        M1_Power = Power - P
-        M2_Power = Power + P
-        wuKong.setAllMotor(M1_Power, M2_Power)
-        Front_Ultrasonic_Measure()
-    }
-}
 function Position_B15 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
     PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
@@ -251,20 +238,6 @@ function CompleteMission (MissionId: string, Data: string) {
         ServerMsg = WROHellasCloud.completeMission(MissionId, Data)
         Response_lst = ServerMsg.split(";")
         Response = Response_lst[0]
-    }
-}
-function Front_Ultrasonic_Measure () {
-    S_Distance = sonar.ping(
-    DigitalPin.P12,
-    DigitalPin.P13,
-    PingUnit.Centimeters
-    )
-    while (S_Distance == 0) {
-        S_Distance = sonar.ping(
-        DigitalPin.P12,
-        DigitalPin.P13,
-        PingUnit.Centimeters
-        )
     }
 }
 function PID_S2_UntilCross_P8 (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
@@ -421,7 +394,6 @@ function Εnergy_measurement () {
 let temp = ""
 let index = 0
 let i = 0
-let S_Distance = 0
 let M2_Power = 0
 let M1_Power = 0
 let P = 0
