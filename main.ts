@@ -308,9 +308,6 @@ function Position_B10 () {
         Pos_To = MissionArea_lst.shift()
     }
 }
-input.onButtonPressed(Button.B, function () {
-    Εnergy_measurement()
-})
 function Position_B07 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
     PID_S2_UntilCross_P0(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
