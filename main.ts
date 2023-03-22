@@ -28,10 +28,10 @@ function Position_B05_B13 (text: string) {
         radio.sendString("" + (MissionType_lst.shift()))
         while (Flag == "False") {
             basic.pause(100)
-            CompleteMission(MissionID_lst.shift(), convertToText(Value))
-            Flag = "False"
-            Pos_To = MissionArea_lst.shift()
         }
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Flag = "False"
+        Pos_To = MissionArea_lst.shift()
     }
 }
 function CreateMission (MissionType: string, Index_lst: number) {
@@ -132,14 +132,37 @@ function PID_S2_UntilBlack (S1_Black: number, S1_White: number, S2_Black: number
     }
 }
 function Position_B06_B14 (text: string) {
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
     wuKong.stopAllMotor()
     if (Pos_To == text) {
-    	
+        MissionType_lst.removeAt(0)
+        Cars = 0
+        for (let index2 = 0; index2 < 3; index2++) {
+            ParkingDistance = sonar.ping(
+            DigitalPin.P13,
+            DigitalPin.P12,
+            PingUnit.Centimeters
+            )
+            while (ParkingDistance == 0) {
+                ParkingDistance = sonar.ping(
+                DigitalPin.P13,
+                DigitalPin.P12,
+                PingUnit.Centimeters
+                )
+            }
+            if (ParkingDistance < 8) {
+                Cars += 1
+            }
+            PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+            PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+        }
+        Value = 3 - Cars
+        CompleteMission(MissionID_lst.shift(), convertToText(Value))
+        Pos_To = MissionArea_lst.shift()
     } else {
         for (let index2 = 0; index2 < 2; index2++) {
-            PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
-            PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+            PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
+            PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
         }
         wuKong.stopAllMotor()
     }
@@ -253,7 +276,7 @@ function Position_B07_B15 (text: string) {
     }
 }
 function Εnergy_measurement () {
-    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.1)
+    PID_S2_UntilCross_P8(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
     wuKong.setAllMotor(20, 20)
     basic.pause(1100)
     wuKong.stopAllMotor()
@@ -286,6 +309,8 @@ function Εnergy_measurement () {
 let temp = ""
 let index = 0
 let i = 0
+let ParkingDistance = 0
+let Cars = 0
 let M2_Power = 0
 let M1_Power = 0
 let P = 0
