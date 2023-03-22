@@ -187,20 +187,6 @@ function PID_S2_UntilCross_P8 (S1_Black: number, S1_White: number, S2_Black: num
         wuKong.setAllMotor(M1_Power, M2_Power)
     }
 }
-input.onButtonPressed(Button.B, function () {
-    Position_B01()
-    Position_B02_B10("B02")
-    Position_B05_B13("B05")
-    Position_B06_B14("B06")
-    Position_B07_B15("B07")
-    Position_B08_B16("B08")
-    Position_B09()
-    Position_B02_B10("B10")
-    Position_B05_B13("B13")
-    Position_B06_B14("B14")
-    Position_B07_B15("B15")
-    Position_B08_B16("B16")
-})
 function PID_S2_UntilCross_P0 (S1_Black: number, S1_White: number, S2_Black: number, S2_White: number, Power: number, Kp: number) {
     while (pins.digitalReadPin(DigitalPin.P0) == 0) {
         P1_Sensor = Math.map(pins.analogReadPin(AnalogPin.P1), S1_Black, S1_White, 12, 90)
