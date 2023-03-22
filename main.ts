@@ -335,7 +335,7 @@ let P2_Black = 0
 let P1_White = 0
 let P1_Black = 0
 basic.showIcon(IconNames.No)
-radio.setGroup(1)
+radio.setGroup(167)
 P1_Black = 843
 P1_White = 1023
 let P1_Offset = 51
