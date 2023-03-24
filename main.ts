@@ -29,6 +29,7 @@ function Position_B05_B13 (text: string) {
         while (Flag == "False") {
             basic.pause(100)
         }
+        basic.pause(1000)
         CompleteMission(MissionID_lst.shift(), convertToText(Value))
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
@@ -40,8 +41,8 @@ function CreateMission (MissionType: string, Index_lst: number) {
     while (Response == "ERROR") {
         ServerMsg = WROHellasCloud.startMission(MissionType)
         Response_lst = ServerMsg.split(";")
+        Response = Response_lst[0]
     }
-    Response = Response_lst[0]
     MissionType_lst[Index_lst] = MissionType
     MissionID_lst[Index_lst] = Response_lst[0]
     MissionArea_lst[Index_lst] = Response_lst[1]
@@ -56,6 +57,7 @@ function Position_B02_B10 (text: string) {
         while (Flag == "False") {
             basic.pause(100)
         }
+        basic.pause(1000)
         CompleteMission(MissionID_lst.shift(), convertToText(Value))
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
@@ -77,6 +79,7 @@ function TurnRight_90 () {
     wuKong.stopAllMotor()
 }
 input.onButtonPressed(Button.A, function () {
+    basic.showIcon(IconNames.StickFigure)
     Flag = "False"
     CreateMission("tmp", 0)
     CreateMission("hum", 1)
@@ -84,8 +87,6 @@ input.onButtonPressed(Button.A, function () {
     CreateMission("umv", 3)
     CreateMission("dbm", 4)
     CreateMission("prk", 5)
-    CreateMission("rnp", 6)
-    CreateMission("lvl", 7)
     Shorting()
     Position_B01()
     Position_B02_B10("B02")
@@ -99,6 +100,7 @@ input.onButtonPressed(Button.A, function () {
     Position_B06_B14("B14")
     Position_B07_B15("B15")
     Position_B08_B16("B16")
+    basic.showIcon(IconNames.Happy)
 })
 function Position_B09 () {
     PID_S2_UntilBlack(P1_Black, P1_White, P2_Black, P2_White, 20, 0.15)
@@ -115,6 +117,7 @@ function Position_B09 () {
         while (Flag == "False") {
             basic.pause(100)
         }
+        basic.pause(1000)
         CompleteMission(MissionID_lst.shift(), convertToText(Value))
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
@@ -212,6 +215,7 @@ function Position_B08_B16 (text: string) {
             while (Flag == "False") {
                 basic.pause(100)
             }
+            basic.pause(1000)
             CompleteMission(MissionID_lst.shift(), convertToText(Value))
             Flag = "False"
             Pos_To = MissionArea_lst.shift()
@@ -233,6 +237,7 @@ function Position_B01 () {
         while (Flag == "False") {
             basic.pause(100)
         }
+        basic.pause(1000)
         CompleteMission(MissionID_lst.shift(), convertToText(Value))
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
@@ -243,11 +248,11 @@ function Shorting () {
     while (i <= MissionArea_lst.length) {
         index = MissionArea_lst.length
         while (index >= i) {
-            if (MissionArea_lst[index] == MissionArea_lst[index - 1]) {
+            if (MissionArea_lst[index] < MissionArea_lst[index - 1]) {
                 temp = MissionArea_lst[index]
                 MissionArea_lst[index] = MissionArea_lst[index - 1]
                 MissionArea_lst[index - 1] = temp
-                temp = MissionArea_lst[index]
+                temp = MissionType_lst[index]
                 MissionType_lst[index] = MissionType_lst[index - 1]
                 MissionType_lst[index - 1] = temp
                 temp = MissionID_lst[index]
@@ -274,6 +279,7 @@ function Position_B07_B15 (text: string) {
         while (Flag == "False") {
             basic.pause(100)
         }
+        basic.pause(1000)
         CompleteMission(MissionID_lst.shift(), convertToText(Value))
         Flag = "False"
         Pos_To = MissionArea_lst.shift()
