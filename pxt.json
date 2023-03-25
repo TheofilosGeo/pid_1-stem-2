@@ -1,10 +1,9 @@
 {
-    "name": "CityBot #4",
+    "name": "CityBot #4 teliko",
     "description": "",
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*",
         "wuKong": "github:elecfreaks/pxt-wukong#v1.5.2",
         "pxt-sonar": "github:microsoft/pxt-sonar#v0.0.5",
         "pxt-wrohellas-cloud": "github:panosverras/pxt-wrohellas-cloud#4598148bb7682ed40f3210ba71c0b01c5f63c95c"
