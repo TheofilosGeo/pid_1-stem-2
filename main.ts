@@ -120,10 +120,10 @@ function Position_B07_B15 (text5: string) {
         }
         wuKong.stopAllMotor()
         while (pins.digitalReadPin(DigitalPin.P0) == 0) {
-            wuKong.setMotorSpeed(wuKong.MotorList.M2, 40)
+            wuKong.setMotorSpeed(wuKong.MotorList.M1, 40)
         }
         while (pins.digitalReadPin(DigitalPin.P0) == 1) {
-            wuKong.setMotorSpeed(wuKong.MotorList.M2, 40)
+            wuKong.setMotorSpeed(wuKong.MotorList.M1, 40)
         }
         wuKong.stopAllMotor()
     } else {
@@ -153,8 +153,9 @@ function Position_B06_B14 (text3: string) {
             if (ParkingDistance < 8) {
                 Cars += 1
             }
-            PID(0.2, "W", 8)
-            PID(0.2, "B", 8)
+            PID(0.3, "W", 8)
+            PID(0.3, "B", 8)
+            wuKong.stopAllMotor()
         }
         ParkingDistance = sonar.ping(
         DigitalPin.P13,
@@ -176,8 +177,8 @@ function Position_B06_B14 (text3: string) {
         Pos_To = MissionArea_lst.shift()
     } else {
         for (let index2 = 0; index2 < 2; index2++) {
-            PID(0.2, "W", 8)
-            PID(0.2, "B", 8)
+            PID(0.3, "W", 8)
+            PID(0.3, "B", 8)
         }
         wuKong.stopAllMotor()
     }
